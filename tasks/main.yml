@@ -1,0 +1,25 @@
+---
+- name: Ensure watchdog is installed.
+  become: true
+  ansible.builtin.apt:
+    name:
+      - watchdog
+    state: present
+
+- name: configure watchdog daemon
+  become: true
+  ansible.builtin.template:
+    src: watchdog.conf.j2
+    dest: /etc/watchdog.conf
+
+- name: Enable watchdog
+  become: true
+  ansible.builtin.service:
+    name: watchdog
+    enabled: true
+
+- name: Restart service watchdog
+  become: true
+  ansible.builtin.service:
+    name: watchdog
+    state: started
